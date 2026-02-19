@@ -121,7 +121,7 @@ static const unsigned char font[FONT_CHARS][FONT_HEIGHT] = {
     {0x0C, 0x0C, 0x0C, 0x0C, 0x0C}  // pipe 124
 };
 
-static fontized text_to_font(const char *text, int scale) {
+static fontized text_to_block(const char *text, int scale) {
   fontized result = {0};
 
   // Check if there is no text or

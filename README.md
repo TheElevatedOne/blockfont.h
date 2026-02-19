@@ -6,11 +6,11 @@ A Font Import for C using 6x5 Grid of Ascii Blocks
 
 ## List of Contents
 
-1. [Font](#font)
-2. [Documentation](#documentation)
-  - [Struct](#struct)
-  - [Function](#function)
-  - [Character Map](#character-map)
+1. [**Font**](#font)
+2. [**Documentation**](#documentation)
+    - [Struct](#struct)
+    - [Function](#function)
+    - [Character Map](#character-map)
 
 ## Font
 

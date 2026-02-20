@@ -2,7 +2,7 @@
 
 blockfont.h is a C header-only library that renders text using a 6x5 grid of ASCII blocks (█). Supports numbers, letters, symbols, scaling, and ANSI colors.
 
-![repo_title](https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/repo_name.png)
+<img src="https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/repo_name.png" width="100%">
 
 ## List of Contents
 
@@ -138,7 +138,7 @@ This is a limitation of the Font Grid.
 This is where other people can take the wheel.<br>
 If you have a symbol you want to be added, have another way to render the character, etc., either **Open an Issue** or with many changes **Fork the Repository And Open a Pull Request**.
 
-![font-preview](https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/font.png)
+<img src="https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/font.png" width="45%">
 
 ## Disclaimer 
 

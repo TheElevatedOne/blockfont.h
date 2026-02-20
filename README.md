@@ -15,7 +15,9 @@ A Font Import for C using 6x5 Grid of Ascii Blocks
 ## Font
 
 ![font-preview](https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/font.png)
+
 Font currently has 96 characters, uses a 6 Wide and 5 Tall Grid of Spaces and ASCII Blocks (█).
+
 It includes a space, unknown (shown as the first two in the preview),
 Numbers, Small Latin Alphabet, Large Latin Alphabet and Symbols found on ANSI Keyboards.
 
@@ -46,21 +48,21 @@ It consists of:
 static fontized blockfont(const char *text, int scale);
 ```
 
-The Function expects a Text and a Scale value.
-Text must be at least 1 character long and scale must be at least 1.
-Otherwise it returns a Struct with `int value = 1` and `char text = ""`.
-Return `int value = 0` is normal.
+The Function expects a Text and a Scale value.<br>
+Text must be at least 1 character long and scale must be at least 1.<br>
+Otherwise it returns a Struct with `int value = 1` and `char text = ""`.<br>
+Return `int value = 0` is normal.<br>
 Uses the default white coloring (ANSI color15, `\033[38;5;15m`)
 
 ```c
 static fontized blockfont_color(const char *text, int scale, int color);
 ```
 
-Expects the same as previous function, plus a Color.
-The color is an integer from 0 to 255 of an ANSI color.
+Expects the same as previous function, plus a Color.<br>
+The color is an integer from 0 to 255 of an ANSI color.<br>
 
-**Color Table:** (16 Colors)
-<img src="https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/color_table.png" width="40%">
+**Color Table:** (16 Colors)<br>
+<img src="https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/color_table.png" width="25%">
 
 For Color Code Reference above 16 colors, look up [ANSI 256 Color Sheet](https://www.ditig.com/256-colors-cheat-sheet).
 
@@ -85,3 +87,13 @@ It maps the font per line in 6-bit Binary in Hexadecimal Format,
 where `1` is a block and `0` is a space.
 
 It has comments per Categories and per Character, with its Name and ASCII value.
+
+## Disclaimer 
+
+I, as many other programmers, use AI as a tool when working on projects.
+
+Some parts of this project have been firstly designed by AI, later modified or found by AI instead of looking through documentation.
+
+I do not plan to stop this practice, but I also check every piece of code that comes out of AI so that it is not malicious nor code breaking.
+
+And for the better or the worse, AI prompting is much, much faster than searching up documentation.

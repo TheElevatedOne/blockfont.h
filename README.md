@@ -1,28 +1,70 @@
 # blockfont.h
 
-![repo_title](https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/repo_name.png)
+blockfont.h is a C header-only library that renders text using a 6x5 grid of ASCII blocks (█). Supports numbers, letters, symbols, scaling, and ANSI colors.
 
-A Font Import for C using 6x5 Grid of Ascii Blocks
+![repo_title](https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/repo_name.png)
 
 ## List of Contents
 
-1. [**Font**](#font)
-2. [**Documentation**](#documentation)
-    - [Struct](#struct)
-    - [Functions](#functions)
-    - [Character Map](#character-map)
+1. [**Features**](#features)
+2. [**Installation**](#installation)
+3. [**Usage**](#usage)
+4. [**Documentation**](#documentation)
+5. [**Issues**](#issues)
+6. [**Disclaimer**](#disclaimer)
 
-## Font
+## Features
 
-![font-preview](https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/font.png)
+- **96 characters**: space, unknown, numbers, lowercase & uppercase letters, symbols.
+- Scalable text with `scale` parameter.
+- ANSI 256-color support.
 
-Font currently has 96 characters, uses a 6 Wide and 5 Tall Grid of Spaces and ASCII Blocks (█).
+## Installation
 
-It includes a space, unknown (shown as the first two in the preview),
-Numbers, Small Latin Alphabet, Large Latin Alphabet and Symbols found on ANSI Keyboards.
+Either
+```shell
+git clone https://github.com/TheElevatedOne/blockfont.h.git
+```
 
-Some characters are less recognisable than others, as it is a limitation of the grid size.
-If you have some variation for a character that can be easier to recognise, create an Issue.
+Or
+```shell
+git submodule add https://github.com/TheElevatedOne/blockfont.h.git blockfont
+```
+
+and then
+```c
+#include "blockfont.h/blockfont.h"
+```
+
+## Usage
+
+### Basic Usage
+
+```c
+#include "blockfont.h/blockfont.h"
+#include <stdio.h>
+
+int main() {
+  fontized text;
+  text = blockfont("Hello", 1);
+  for (int row = 0; row < 5; row++) {
+    printf("%s\n", text.text[row]);
+  }
+  return 0;
+}
+```
+
+### Color Usage
+```c
+int main() {
+  fontized text;
+  text = blockfont_color("Hello", 1, 9);
+  for (int row = 0; row < 5; row++) {
+    printf("%s\n", text.text[row]);
+  }
+  return 0;
+}
+```
 
 ## Documentation
 
@@ -88,12 +130,20 @@ where `1` is a block and `0` is a space.
 
 It has comments per Categories and per Character, with its Name and ASCII value.
 
+## Issues
+
+Some characters are not as easy to recognise and some are unrecognisable.<br>
+This is a limitation of the Font Grid.
+
+This is where other people can take the wheel.<br>
+If you have a symbol you want to be added, have another way to render the character, etc., either **Open an Issue** or with many changes **Fork the Repository And Open a Pull Request**.
+
+![font-preview](https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/font.png)
+
 ## Disclaimer 
 
-I, as many other programmers, use AI as a tool when working on projects.
-
+I, as many other programmers, use AI as a tool when working on projects. <br>
 Some parts of this project have been firstly designed by AI, later modified or found by AI instead of looking through documentation.
 
-I do not plan to stop this practice, but I also check every piece of code that comes out of AI so that it is not malicious nor code breaking.
-
+I do not plan to stop this practice, but I also check every piece of code that comes out of AI so that it is not malicious nor code breaking. <br>
 And for the better or the worse, AI prompting is much, much faster than searching up documentation.

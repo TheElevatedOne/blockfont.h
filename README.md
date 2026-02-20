@@ -9,7 +9,7 @@ A Font Import for C using 6x5 Grid of Ascii Blocks
 1. [**Font**](#font)
 2. [**Documentation**](#documentation)
     - [Struct](#struct)
-    - [Function](#function)
+    - [Functions](#functions)
     - [Character Map](#character-map)
 
 ## Font
@@ -31,25 +31,38 @@ The code consists of a Struct, a Function and the Character Map.
 ```c
 typedef struct {
     int value;
-    char text[8192];
+    char text[5][8192];
 } fontized;
 ```
 
 The Struct is the return value of the function.
 It consists of:
 - `int value` - return code
-- `char text[8192]` - return block-ified text
+- `char text[5][8192]` - return array of blocks and spaces per row of the result text without newlines
 
-### Function
+### Functions
 
 ```c
-static fontized text_to_block(const char *text, int scale);
+static fontized blockfont(const char *text, int scale);
 ```
 
 The Function expects a Text and a Scale value.
 Text must be at least 1 character long and scale must be at least 1.
 Otherwise it returns a Struct with `int value = 1` and `char text = ""`.
 Return `int value = 0` is normal.
+Uses the default white coloring (ANSI color15, `\033[38;5;15m`)
+
+```c
+static fontized blockfont_color(const char *text, int scale, int color);
+```
+
+Expects the same as previous function, plus a Color.
+The color is an integer from 0 to 255 of an ANSI color.
+
+**Color Table:** (16 Colors)
+<img src="https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/color_table.png" width="40%">
+
+For Color Code Reference above 16 colors, look up [ANSI 256 Color Sheet](https://www.ditig.com/256-colors-cheat-sheet).
 
 ### Character Map
 

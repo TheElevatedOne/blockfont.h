@@ -3,8 +3,13 @@
 
 int main() {
   fontized font;
-  font = text_to_block("blockfont.h", 1);
-  printf("%s\n", font.text);
+  font = blockfont_color("blockfont.h", 1, 10);
+  printf("\n");
+  for (int row = 0; row < 5; row++) {
+    printf("%s", font.text[row]);
+    printf("\n");
+  }
+  printf("\n");
 
   return 0;
 }

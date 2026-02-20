@@ -3,16 +3,22 @@
 
 int main() {
   fontized font;
-  font = text_to_block(" Á0123456789", 1);
-  printf("\n%s\n", font.text);
-  font = text_to_block("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1);
-  printf("%s\n", font.text);
-  font = text_to_block("abcdefghijklmnopqrstuvwxyz", 1);
-  printf("%s\n", font.text);
-  font = text_to_block(".,:;'\"/|\\()[]{}<>=+-_!?`~@", 1);
-  printf("%s\n", font.text);
-  font = text_to_block("#$%^&*", 1);
-  printf("%s\n", font.text);
+  font = blockfont(" Á0123456789", 1);
+  printf("\n");
+  print_blockfont(font);
+  font = blockfont("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1);
+  printf("\n");
+  print_blockfont(font);
+  font = blockfont("abcdefghijklmnopqrstuvwxyz", 1);
+  printf("\n");
+  print_blockfont(font);
+  font = blockfont(".,:;'\"/|\\()[]{}<>=+-_!?`~@", 1);
+  printf("\n");
+  print_blockfont(font);
+  font = blockfont("#$%^&*", 1);
+  printf("\n");
+  print_blockfont(font);
+  printf("\n");
 
   return 0;
 }

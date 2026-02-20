@@ -10,9 +10,15 @@
 #define FONT_CHARS 128
 #define SCALE_MIN 1
 
+/**
+ * Is the return-type for both functions.
+ *
+ * @param int value Returns a 0 if all good, otherwise 1
+ * @param text[5][8192] Returns an array of blocks per row of text
+ */
 typedef struct {
   int value;
-  char text[8192];
+  char text[FONT_HEIGHT][8192];
 } fontized;
 
 // 6x5 font stored as bitmasks (each row is 5 bits)
@@ -121,19 +127,40 @@ static const unsigned char font[FONT_CHARS][FONT_HEIGHT] = {
     {0x0C, 0x0C, 0x0C, 0x0C, 0x0C}  // pipe 124
 };
 
-static fontized text_to_block(const char *text, int scale) {
+/**
+ * Returns a char array of a blockfont
+ * with specified color
+ *
+ * @param char *text Input Text
+ * @param int scale Font Scale
+ * @param int color ANSI Color 0-255
+ *
+ * Colors are ANSI Escape Sequences:
+ * so 0 for Black
+ * and 8 for Gray
+ */
+static fontized blockfont_color(const char *text, int scale, int color) {
   fontized result = {0};
 
   // Check if there is no text or
   // no scaling and return
   if (strlen(text) == 0 || scale < SCALE_MIN) {
-    strcpy(result.text, "");
+    result.value = 1;
+    return result;
+  }
+
+  // Check if color values are
+  // out of range for ANSI colors
+  if (color < 0 || color > 255) {
     result.value = 1;
     return result;
   }
 
   // Go through font height
   for (int row = 0; row < FONT_HEIGHT; row++) {
+    snprintf(result.text[row] + strlen(result.text[row]),
+             sizeof(result.text[row]) - strlen(result.text[row]),
+             "\033[38;5;%dm", color);
     // Vertical Scaling
     for (int vs = 0; vs < scale; vs++) {
       // Check per Character in char *text
@@ -410,19 +437,46 @@ static fontized text_to_block(const char *text, int scale) {
           for (int col = 0; col < FONT_WIDTH; col++) {
             int bit = glyph[row] & (1 << (FONT_WIDTH - 1 - col));
             for (int hs = 0; hs < scale; hs++) {
-              strcat(result.text, bit ? "█" : " ");
+              strcat(result.text[row], bit ? "█" : " ");
             }
           }
         }
         for (int i = 0; i < scale; i++) {
-          strcat(result.text, " ");
+          strcat(result.text[row], " ");
         }
       }
-      strcat(result.text, "\n");
+      strcat(result.text[row], "\033[0m");
+      // strcat(result.text, "\n");
     }
   }
   result.value = 0;
   return result;
+}
+
+/**
+ * Returns a char array of a blockfont
+ * with default color {1, 37} white
+ *
+ * @param char *text Input Text
+ * @param int scale Font Scale
+ */
+static fontized blockfont(const char *text, int scale) {
+  fontized result = {0};
+  result = blockfont_color(text, scale, 15);
+  return result;
+}
+
+/**
+ * Prints the blockfont into the console
+ * without any changes to it.
+ * For testing/example purposes
+ *
+ * @param fontized result Return from blockfont functions
+ */
+static void print_blockfont(fontized result) {
+  for (int row = 0; row < FONT_HEIGHT; row++) {
+    printf("%s\n", result.text[row]);
+  }
 }
 
 #endif // !BLOCKFONT_H

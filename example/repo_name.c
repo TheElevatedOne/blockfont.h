@@ -5,7 +5,7 @@ int main() {
   fontized font;
   font = blockfont_color("blockfont.h", 1, 10);
   printf("\n");
-  for (int row = 0; row < 5; row++) {
+  for (int row = 0; row < font.rows; row++) {
     printf("%s", font.text[row]);
     printf("\n");
   }

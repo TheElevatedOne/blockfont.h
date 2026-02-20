@@ -9,6 +9,7 @@
 #define FONT_HEIGHT 5
 #define FONT_CHARS 128
 #define SCALE_MIN 1
+#define SCALE_MAX 100
 
 /**
  * Is the return-type for both functions.
@@ -18,7 +19,9 @@
  */
 typedef struct {
   int value;
-  char text[FONT_HEIGHT][8192];
+  int scale;
+  int rows;
+  char text[FONT_HEIGHT * SCALE_MAX][8192];
 } fontized;
 
 // 6x5 font stored as bitmasks (each row is 5 bits)
@@ -144,7 +147,7 @@ static fontized blockfont_color(const char *text, int scale, int color) {
 
   // Check if there is no text or
   // no scaling and return
-  if (strlen(text) == 0 || scale < SCALE_MIN) {
+  if (strlen(text) == 0 || scale < SCALE_MIN || scale > SCALE_MAX) {
     result.value = 1;
     return result;
   }
@@ -156,13 +159,22 @@ static fontized blockfont_color(const char *text, int scale, int color) {
     return result;
   }
 
+  result.scale = scale;
+  result.rows = scale * FONT_HEIGHT;
+
+  int vertical_scaling_offset = -1;
+  int row_buffer = 0;
+
   // Go through font height
   for (int row = 0; row < FONT_HEIGHT; row++) {
-    snprintf(result.text[row] + strlen(result.text[row]),
-             sizeof(result.text[row]) - strlen(result.text[row]),
-             "\033[38;5;%dm", color);
     // Vertical Scaling
     for (int vs = 0; vs < scale; vs++) {
+      vertical_scaling_offset++;
+      snprintf(result.text[vertical_scaling_offset] +
+                   strlen(result.text[vertical_scaling_offset]),
+               sizeof(result.text[vertical_scaling_offset]) -
+                   strlen(result.text[vertical_scaling_offset]),
+               "\033[38;5;%dm", color);
       // Check per Character in char *text
       for (size_t i = 0; i < strlen(text); i++) {
         const unsigned char *glyph = NULL;
@@ -437,16 +449,17 @@ static fontized blockfont_color(const char *text, int scale, int color) {
           for (int col = 0; col < FONT_WIDTH; col++) {
             int bit = glyph[row] & (1 << (FONT_WIDTH - 1 - col));
             for (int hs = 0; hs < scale; hs++) {
-              strcat(result.text[row], bit ? "█" : " ");
+              strcat(result.text[vertical_scaling_offset], bit ? "█" : " ");
             }
           }
         }
         for (int i = 0; i < scale; i++) {
-          strcat(result.text[row], " ");
+          strcat(result.text[vertical_scaling_offset], " ");
         }
       }
-      strcat(result.text[row], "\033[0m");
+      strcat(result.text[vertical_scaling_offset], "\033[0m");
       // strcat(result.text, "\n");
+      row_buffer = row;
     }
   }
   result.value = 0;
@@ -455,7 +468,7 @@ static fontized blockfont_color(const char *text, int scale, int color) {
 
 /**
  * Returns a char array of a blockfont
- * with default color {1, 37} white
+ * with default color15 white
  *
  * @param char *text Input Text
  * @param int scale Font Scale
@@ -474,7 +487,7 @@ static fontized blockfont(const char *text, int scale) {
  * @param fontized result Return from blockfont functions
  */
 static void print_blockfont(fontized result) {
-  for (int row = 0; row < FONT_HEIGHT; row++) {
+  for (int row = 0; row < (result.rows); row++) {
     printf("%s\n", result.text[row]);
   }
 }

@@ -10,6 +10,7 @@ int main() {
     printf("\n");
   }
   printf("\n");
+  free_blockfont(&font);
 
   return 0;
 }

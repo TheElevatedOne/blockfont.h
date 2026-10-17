@@ -1,1 +1,6 @@
 testing.txt
+*.o
+*.so
+*.so.*
+example/character_map
+example/repo_name

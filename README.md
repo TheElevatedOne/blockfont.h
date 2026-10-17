@@ -1,6 +1,8 @@
 # blockfont.h
 
-blockfont.h is a C header-only library that renders text using a 6x5 grid of ASCII blocks (█). Supports numbers, letters, symbols, scaling, and ANSI colors.
+![Static Badge](https://img.shields.io/badge/CLAUDE-VIBECODED?style=for-the-badge&logo=claude&label=VIBECODED&labelColor=%23333333&color=%23de7356)
+
+blockfont.h is a C shared library that renders text using a 6x5 grid of ASCII blocks (█). Supports numbers, letters, symbols, scaling, and ANSI colors.
 
 <img src="https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/repo_name.png" width="100%">
 
@@ -31,9 +33,25 @@ Or
 git submodule add https://github.com/TheElevatedOne/blockfont.h.git blockfont
 ```
 
-and then
+Then build the shared library
+```shell
+cd blockfont.h
+make                 # builds libblockfont.so
+sudo make install    # optional, installs to /usr/local (PREFIX=... to change)
+make examples        # optional, builds the examples
+```
+
+and include the header
 ```c
-#include "blockfont.h/blockfont.h"
+#include <blockfont.h>               // when installed
+#include "blockfont.h/blockfont.h"   // when used from the repo
+```
+
+and link against it
+```shell
+cc main.c -lblockfont                                    # when installed
+cc main.c -Iblockfont.h -Lblockfont.h -lblockfont \
+   -Wl,-rpath,'$ORIGIN/blockfont.h'                      # when used from the repo
 ```
 
 ## Usage
@@ -41,15 +59,15 @@ and then
 ### Basic Usage
 
 ```c
-#include "blockfont.h/blockfont.h"
+#include <blockfont.h>
 #include <stdio.h>
 
 int main() {
-  fontized text;
-  text = blockfont("Hello", 1);
-  for (int row = 0; row < 5; row++) {
+  fontized text = blockfont("Hello", 1);
+  for (int row = 0; row < text.rows; row++) {
     printf("%s\n", text.text[row]);
   }
+  free_blockfont(&text);
   return 0;
 }
 ```
@@ -57,51 +75,68 @@ int main() {
 ### Color Usage
 ```c
 int main() {
-  fontized text;
-  text = blockfont_color("Hello", 1, 9);
-  for (int row = 0; row < 5; row++) {
-    printf("%s\n", text.text[row]);
-  }
+  fontized text = blockfont_color("Hello", 1, 9);
+  print_blockfont(text);
+  free_blockfont(&text);
   return 0;
 }
 ```
 
 ## Documentation
 
-The code consists of a Struct, a Function and the Character Map.
+The library consists of a Struct, Functions and the Character Map.
 
 ### Struct
 
 ```c
 typedef struct {
-    int value;
-    char text[5][8192];
+  int value;
+  int scale;
+  int rows;
+  char **text;
 } fontized;
 ```
 
-The Struct is the return value of the function.
+The Struct is the return value of the functions.
 It consists of:
 - `int value` - return code
-- `char text[5][8192]` - return array of blocks and spaces per row of the result text without newlines
+- `int scale` - scale the text was rendered with
+- `int rows` - number of rows in `text` (`5 * scale`)
+- `char **text` - array of rows of blocks and spaces of the result text without newlines
+
+`text` is allocated on the heap, sized to the input text and scale,
+so it must be released with `free_blockfont()`.
 
 ### Functions
 
 ```c
-static fontized blockfont(const char *text, int scale);
+fontized blockfont(const char *text, int scale);
 ```
 
 The Function expects a Text and a Scale value.<br>
 Text must be at least 1 character long and scale must be at least 1.<br>
-Otherwise it returns a Struct with `int value = 1` and `char text = ""`.<br>
+Otherwise (or when allocation fails) it returns a Struct with `int value = 1` and `char **text = NULL`.<br>
 Return `int value = 0` is normal.<br>
 Uses the default white coloring (ANSI color15, `\033[38;5;15m`)
 
 ```c
-static fontized blockfont_color(const char *text, int scale, int color);
+fontized blockfont_color(const char *text, int scale, int color);
 ```
 
 Expects the same as previous function, plus a Color.<br>
 The color is an integer from 0 to 255 of an ANSI color.<br>
+
+```c
+void print_blockfont(fontized result);
+```
+
+Prints every row of the result followed by a newline.
+
+```c
+void free_blockfont(fontized *result);
+```
+
+Frees the memory of a result and resets it. Safe to call on failed results and more than once.
 
 **Color Table:** (16 Colors)<br>
 <img src="https://raw.githubusercontent.com/TheElevatedOne/blockfont.h/refs/heads/main/example/color_table.png" width="25%">
@@ -111,7 +146,7 @@ For Color Code Reference above 16 colors, look up [ANSI 256 Color Sheet](https:/
 ### Character Map
 
 ```c
-#define FONT_HEIGHT 5
+// blockfont.c
 #define FONT_CHARS 128
 
 static const unsigned char font[FONT_CHARS][FONT_HEIGHT] = {

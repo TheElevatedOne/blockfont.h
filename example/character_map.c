@@ -2,22 +2,19 @@
 #include <stdio.h>
 
 int main() {
-  fontized font;
-  font = blockfont(" Á0123456789", 1);
-  printf("\n");
-  print_blockfont(font);
-  font = blockfont("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1);
-  printf("\n");
-  print_blockfont(font);
-  font = blockfont("abcdefghijklmnopqrstuvwxyz", 1);
-  printf("\n");
-  print_blockfont(font);
-  font = blockfont(".,:;'\"/|\\()[]{}<>=+-_!?`~@", 1);
-  printf("\n");
-  print_blockfont(font);
-  font = blockfont("#$%^&*", 1);
-  printf("\n");
-  print_blockfont(font);
+  const char *lines[] = {
+      " Á0123456789",
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "abcdefghijklmnopqrstuvwxyz",
+      ".,:;'\"/|\\()[]{}<>=+-_!?`~@",
+      "#$%^&*",
+  };
+  for (size_t i = 0; i < sizeof(lines) / sizeof(lines[0]); i++) {
+    fontized font = blockfont(lines[i], 1);
+    printf("\n");
+    print_blockfont(font);
+    free_blockfont(&font);
+  }
   printf("\n");
 
   return 0;

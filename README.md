@@ -1,6 +1,7 @@
 # blockfont.h
 
-![Static Badge](https://img.shields.io/badge/CLAUDE-VIBECODED?style=for-the-badge&logo=claude&label=VIBECODED&labelColor=%23333333&color=%23de7356)
+![Static Badge](https://img.shields.io/badge/CLAUDE-VIBECODED?style=for-the-badge&logo=claude&label=VIBECODED&labelColor=%23333333&color=%23de7356) [![AUR](https://img.shields.io/aur/version/blockfont-git?style=for-the-badge&logo=archlinux)](https://aur.archlinux.org/packages/blockfont-git)
+
 
 blockfont.h is a C shared library that renders text using a 6x5 grid of ASCII blocks (█). Supports numbers, letters, symbols, scaling, and ANSI colors.
 
